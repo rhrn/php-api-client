@@ -16,7 +16,7 @@ class Api {
 	private $config		= array();
 	private $params		= array();
 	private $headers	= array(
-		//'Content-type' => 'application/x-www-form-urlencoded',
+		'Content-type' => 'application/x-www-form-urlencoded',
 	);
 
 	private $json		= true;
@@ -76,7 +76,7 @@ class Api {
 		return $this->execute();
 	}
 
-	public function getUrl() {
+	public function getURL() {
 		$this->prepare();
 		return $this->url . '?' . $this->query;
 	}
@@ -178,16 +178,17 @@ class Api {
 
 		$ch = curl_init(); 
 
-		curl_setopt($ch, CURLOPT_URL, $this->url);
-
 		if ($this->method === self::METHOD_GET) {
 
 			$this->url .= '?' . $this->query;
+			curl_setopt($ch, CURLOPT_URL, $this->url);
+
 			$this->query = '';
 			curl_setopt($ch, CURLOPT_HTTPGET, true);
 
 		} elseif ($this->method === self::METHOD_POST) {
 
+			curl_setopt($ch, CURLOPT_URL, $this->url);
 			curl_setopt($ch, CURLOPT_POST, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $this->data);
 		}
@@ -204,7 +205,8 @@ class Api {
 		return $this->result();
 	}
 
-	private function execute_contents_() {
+	/** not supported upload, need update */
+	private function execute_contents() {
 
 		$this->prepare();
 
